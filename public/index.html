@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Splash CRM - Enterprise CRM System">
+    <title>Splash CRM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            color: #667eea;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .status {
+            background: #10b981;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            display: inline-block;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+        .info {
+            text-align: left;
+            background: #f3f4f6;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 2rem;
+        }
+        .info h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        .info ul {
+            list-style: none;
+        }
+        .info li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .info li:last-child {
+            border-bottom: none;
+        }
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #667eea;
+            color: white;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌊 Splash CRM</h1>
+        <p class="subtitle">Enterprise CRM System</p>
+
+        <div class="status">✓ System Running</div>
+
+        <div class="info">
+            <h3>Quick Links</h3>
+            <ul>
+                <li>
+                    <span class="badge">API</span>
+                    <a href="/api/v1/health" target="_blank">API Health Check</a>
+                </li>
+                <li>
+                    <span class="badge">Docs</span>
+                    <a href="https://github.com/your-org/splash-crm" target="_blank">Documentation</a>
+                </li>
+                <li>
+                    <span class="badge">Auth</span>
+                    Endpoint: <code>POST /api/v1/auth/login</code>
+                </li>
+            </ul>
+        </div>
+
+        <div class="info">
+            <h3>Demo Credentials</h3>
+            <ul>
+                <li><strong>Admin:</strong> admin@demo.com / password123</li>
+                <li><strong>Sales:</strong> sales@demo.com / password123</li>
+            </ul>
+        </div>
+
+        <div class="info">
+            <h3>API Example</h3>
+            <pre style="text-align: left; overflow-x: auto; padding: 1rem; background: white; border-radius: 0.25rem; font-size: 0.875rem;">
+curl -X POST http://localhost:8000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@demo.com","password":"password123"}'
+            </pre>
+        </div>
+
+        <p style="margin-top: 2rem; color: #666; font-size: 0.875rem;">
+            Built with ❤️ using PHP, MySQL, and Redis
+        </p>
+    </div>
+</body>
+</html>
