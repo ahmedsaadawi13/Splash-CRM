@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Base Controller
+ *
+ * File: app/Http/Controllers/BaseController.php
+ *
+ * Base controller providing common functionality for all controllers:
+ * - JSON response helpers (success, error, validation error, not found, etc.)
+ * - Logging helpers
+ * - Common utilities
+ *
+ * All API controllers should extend this base controller.
+ *
+ * @package App\Http\Controllers
+ * @version 1.0.0
+ */
+
 namespace App\Http\Controllers;
 
 use Psr\Http\Message\ResponseInterface as Response;

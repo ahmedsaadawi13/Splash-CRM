@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Audit Service
+ *
+ * File: app/Services/AuditService.php
+ *
+ * Provides comprehensive audit logging for all CRM operations:
+ * - Logs create, update, delete, restore actions
+ * - Tracks old values vs new values
+ * - Records changed fields
+ * - Captures user, IP address, user agent
+ * - Retrieves audit history for any entity
+ *
+ * @package App\Services
+ * @version 1.0.0
+ */
+
 namespace App\Services;
 
 use Illuminate\Database\Capsule\Manager as DB;

@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Contact Controller
+ *
+ * File: app/Http/Controllers/ContactController.php
+ *
+ * Handles all CRUD operations for contacts including:
+ * - List with pagination, search, and filtering by account
+ * - Create, read, update, delete operations
+ * - Relationship management with accounts and users
+ * - Audit logging for all operations
+ *
+ * @package App\Http\Controllers
+ * @version 1.0.0
+ */
+
 namespace App\Http\Controllers;
 
 use App\Models\Contact;

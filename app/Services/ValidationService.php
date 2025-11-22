@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Validation Service
+ *
+ * File: app/Services/ValidationService.php
+ *
+ * Provides comprehensive input validation for API requests:
+ * - Required, email, min, max, numeric validation
+ * - Unique, exists, in (enum) validation
+ * - Date, URL, confirmed field validation
+ * - Formatted error messages for JSON responses
+ *
+ * @package App\Services
+ * @version 1.0.0
+ */
+
 namespace App\Services;
 
 use Illuminate\Database\Capsule\Manager as DB;

@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * JWT Service
+ *
+ * File: app/Services/JWTService.php
+ *
+ * Handles JSON Web Token (JWT) operations:
+ * - Generate access tokens (short-lived)
+ * - Generate refresh tokens (long-lived)
+ * - Validate and decode tokens
+ * - Extract payload from tokens
+ * - Check token expiration
+ *
+ * @package App\Services
+ * @version 1.0.0
+ */
+
 namespace App\Services;
 
 use Firebase\JWT\JWT;

@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Account Controller
+ *
+ * File: app/Http/Controllers/AccountController.php
+ *
+ * Handles all CRUD operations for accounts including:
+ * - List with pagination, search, and filtering by type/industry
+ * - Create, read, update, delete operations
+ * - Relationship management with contacts and opportunities
+ * - Audit logging for all operations
+ *
+ * @package App\Http\Controllers
+ * @version 1.0.0
+ */
+
 namespace App\Http\Controllers;
 
 use App\Models\Account;

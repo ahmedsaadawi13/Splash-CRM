@@ -82,14 +82,37 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) {
         $protected->post('/workflows/execute', 'App\Http\Controllers\WorkflowController:execute');
         $protected->get('/workflows/{id}', 'App\Http\Controllers\WorkflowController:show');
 
-        // Users & Roles
+        // Users
         $protected->get('/users', 'App\Http\Controllers\UserController:index');
         $protected->post('/users', 'App\Http\Controllers\UserController:store');
         $protected->get('/users/{id}', 'App\Http\Controllers\UserController:show');
         $protected->put('/users/{id}', 'App\Http\Controllers\UserController:update');
+        $protected->delete('/users/{id}', 'App\Http\Controllers\UserController:destroy');
 
+        // Roles & Permissions
         $protected->get('/roles', 'App\Http\Controllers\RoleController:index');
         $protected->post('/roles', 'App\Http\Controllers\RoleController:store');
+        $protected->get('/roles/{id}', 'App\Http\Controllers\RoleController:show');
+        $protected->put('/roles/{id}', 'App\Http\Controllers\RoleController:update');
+        $protected->delete('/roles/{id}', 'App\Http\Controllers\RoleController:destroy');
+        $protected->get('/permissions', 'App\Http\Controllers\RoleController:permissions');
+
+        // Quotes
+        $protected->get('/quotes', 'App\Http\Controllers\QuoteController:index');
+        $protected->post('/quotes', 'App\Http\Controllers\QuoteController:store');
+        $protected->get('/quotes/{id}', 'App\Http\Controllers\QuoteController:show');
+        $protected->put('/quotes/{id}', 'App\Http\Controllers\QuoteController:update');
+        $protected->delete('/quotes/{id}', 'App\Http\Controllers\QuoteController:destroy');
+        $protected->post('/quotes/{id}/accept', 'App\Http\Controllers\QuoteController:accept');
+        $protected->post('/quotes/{id}/decline', 'App\Http\Controllers\QuoteController:decline');
+
+        // Invoices
+        $protected->get('/invoices', 'App\Http\Controllers\InvoiceController:index');
+        $protected->post('/invoices', 'App\Http\Controllers\InvoiceController:store');
+        $protected->get('/invoices/{id}', 'App\Http\Controllers\InvoiceController:show');
+        $protected->put('/invoices/{id}', 'App\Http\Controllers\InvoiceController:update');
+        $protected->delete('/invoices/{id}', 'App\Http\Controllers\InvoiceController:destroy');
+        $protected->post('/invoices/{id}/mark-paid', 'App\Http\Controllers\InvoiceController:markPaid');
 
     })->add(AuthMiddleware::class);
 });

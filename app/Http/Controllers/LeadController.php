@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Lead Controller
+ *
+ * File: app/Http/Controllers/LeadController.php
+ *
+ * Handles all CRUD operations for leads including:
+ * - List with pagination, search, and filtering
+ * - Create, read, update, delete operations
+ * - Lead conversion to Account/Contact/Opportunity
+ * - Audit logging for all operations
+ *
+ * @package App\Http\Controllers
+ * @version 1.0.0
+ */
+
 namespace App\Http\Controllers;
 
 use App\Models\Lead;

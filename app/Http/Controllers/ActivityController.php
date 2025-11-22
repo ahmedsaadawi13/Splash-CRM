@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Activity Controller
+ *
+ * File: app/Http/Controllers/ActivityController.php
+ *
+ * Handles all CRUD operations for activities including:
+ * - List with pagination, search, and filtering by type/status/priority
+ * - Support for tasks, calls, meetings, emails, events, notes
+ * - Polymorphic relationships to leads, contacts, accounts, opportunities
+ * - Create, read, update, delete operations
+ * - Audit logging for all operations
+ *
+ * @package App\Http\Controllers
+ * @version 1.0.0
+ */
+
 namespace App\Http\Controllers;
 
 use App\Models\Activity;

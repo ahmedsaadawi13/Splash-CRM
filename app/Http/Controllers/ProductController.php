@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Product Controller
+ *
+ * File: app/Http/Controllers/ProductController.php
+ *
+ * Handles all CRUD operations for products including:
+ * - List with pagination, search, and filtering by category/family
+ * - Create, read, update, delete operations
+ * - Price management (unit, cost, list prices)
+ * - Inventory tracking and stock management
+ * - Audit logging for all operations
+ *
+ * @package App\Http\Controllers
+ * @version 1.0.0
+ */
+
 namespace App\Http\Controllers;
 
 use App\Models\Product;

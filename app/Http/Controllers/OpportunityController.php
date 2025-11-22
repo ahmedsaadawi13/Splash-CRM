@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Opportunity Controller
+ *
+ * File: app/Http/Controllers/OpportunityController.php
+ *
+ * Handles all CRUD operations for opportunities including:
+ * - List with pagination, search, and filtering by stage/status
+ * - Create, read, update, delete operations
+ * - Auto-set closed date when marked won/lost
+ * - Relationship management with accounts and contacts
+ * - Audit logging for all operations
+ *
+ * @package App\Http\Controllers
+ * @version 1.0.0
+ */
+
 namespace App\Http\Controllers;
 
 use App\Models\Opportunity;

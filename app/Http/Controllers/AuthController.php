@@ -1,5 +1,22 @@
 <?php
 
+/**
+ * Authentication Controller
+ *
+ * File: app/Http/Controllers/AuthController.php
+ *
+ * Handles all authentication operations including:
+ * - User login with JWT token generation
+ * - User registration with tenant creation
+ * - Token refresh mechanism
+ * - User logout
+ * - Password reset flow
+ * - Get current authenticated user
+ *
+ * @package App\Http\Controllers
+ * @version 1.0.0
+ */
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
