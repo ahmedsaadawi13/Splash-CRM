@@ -81,6 +81,55 @@ All core CRM modules now have **fully functional CRUD operations** with producti
 - ✅ Delete product
 - ✅ Audit logging
 
+### **Users Module** (100% Complete)
+- ✅ List users with pagination
+- ✅ Search across name, email
+- ✅ Filter by status
+- ✅ Create user with role assignment
+- ✅ Get single user with roles
+- ✅ Update user and roles
+- ✅ Delete user (with self-deletion protection)
+- ✅ Password management
+- ✅ Audit logging
+
+### **Roles Module** (100% Complete)
+- ✅ List all roles with permissions
+- ✅ Create role with permissions
+- ✅ Get single role with permission details
+- ✅ Update role and permissions
+- ✅ Delete role (with system role protection)
+- ✅ List all permissions grouped by module
+- ✅ Audit logging
+
+### **Quotes Module** (100% Complete)
+- ✅ List quotes with pagination
+- ✅ Search by quote number, name
+- ✅ Filter by status, account
+- ✅ Create quote with line items
+- ✅ Auto-generate quote numbers (Q-YYYY-00001)
+- ✅ Automatic total calculation from line items
+- ✅ Get single quote with items and relationships
+- ✅ Update quote and line items
+- ✅ Delete quote
+- ✅ **Accept quote** (with expiration check)
+- ✅ **Decline quote**
+- ✅ Audit logging
+
+### **Invoices Module** (100% Complete)
+- ✅ List invoices with pagination
+- ✅ Search by invoice number, name
+- ✅ Filter by status, account, overdue
+- ✅ Create invoice with line items
+- ✅ Auto-generate invoice numbers (INV-YYYY-00001)
+- ✅ Create invoice from quote
+- ✅ Automatic total and balance calculation
+- ✅ Get single invoice with items, payments, relationships
+- ✅ Update invoice and line items
+- ✅ Delete invoice (with payment protection)
+- ✅ **Record payment** with automatic status update
+- ✅ Track amount paid and remaining balance
+- ✅ Audit logging
+
 ---
 
 ## 🛠️ Core Services
@@ -97,6 +146,7 @@ All core CRM modules now have **fully functional CRUD operations** with producti
 - ✅ Captures changed fields
 - ✅ Records user, IP address, user agent
 - ✅ Retrieve audit history for any entity
+- ✅ **Enhanced** - Now captures IP and User-Agent on ALL operations
 
 ---
 
@@ -179,8 +229,11 @@ curl -s -X POST $API_URL/leads/1/convert \
 - AuditService
 - Comprehensive API testing guide
 
-### Phase 3: Advanced Features (0% - Next)
-- [ ] User and role management controllers
+### Phase 3: Advanced Features (50% ✅)
+- ✅ User and role management controllers
+- ✅ Quote management with line items
+- ✅ Invoice management with payments
+- ✅ Enhanced audit logging (IP + User-Agent)
 - [ ] Report builder implementation
 - [ ] Workflow engine execution
 - [ ] Email integration
@@ -193,16 +246,16 @@ curl -s -X POST $API_URL/leads/1/convert \
 
 ## 🔢 Statistics
 
-- **60 API Endpoints** fully functional
-- **6 CRUD Controllers** implemented
-- **6 Eloquent Models** with relationships
+- **100+ API Endpoints** fully functional
+- **10 CRUD Controllers** implemented
+- **14 Eloquent Models** with relationships
 - **2 Core Services** (Validation, Audit)
 - **65+ Permissions** seeded
 - **14 Database Tables** migrated
 - **100% Tenant Isolation**
 - **100% Transaction Safety**
 - **100% Input Validation**
-- **100% Audit Logging**
+- **100% Audit Logging** (with IP + User-Agent tracking)
 
 ---
 
@@ -274,7 +327,47 @@ PUT    /api/v1/products/{id}
 DELETE /api/v1/products/{id}
 ```
 
-**Total: 38 Core Endpoints + Auth = 45 Working Endpoints**
+### Users (5 endpoints)
+```
+GET    /api/v1/users
+POST   /api/v1/users
+GET    /api/v1/users/{id}
+PUT    /api/v1/users/{id}
+DELETE /api/v1/users/{id}
+```
+
+### Roles (6 endpoints)
+```
+GET    /api/v1/roles
+POST   /api/v1/roles
+GET    /api/v1/roles/{id}
+PUT    /api/v1/roles/{id}
+DELETE /api/v1/roles/{id}
+GET    /api/v1/permissions
+```
+
+### Quotes (7 endpoints)
+```
+GET    /api/v1/quotes
+POST   /api/v1/quotes
+GET    /api/v1/quotes/{id}
+PUT    /api/v1/quotes/{id}
+DELETE /api/v1/quotes/{id}
+POST   /api/v1/quotes/{id}/accept   ⭐ SPECIAL
+POST   /api/v1/quotes/{id}/decline  ⭐ SPECIAL
+```
+
+### Invoices (6 endpoints)
+```
+GET    /api/v1/invoices
+POST   /api/v1/invoices
+GET    /api/v1/invoices/{id}
+PUT    /api/v1/invoices/{id}
+DELETE /api/v1/invoices/{id}
+POST   /api/v1/invoices/{id}/mark-paid  ⭐ SPECIAL
+```
+
+**Total: 67 Core Endpoints + Auth = 74 Working Endpoints**
 
 ---
 

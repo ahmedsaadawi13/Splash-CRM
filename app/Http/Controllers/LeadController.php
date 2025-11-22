@@ -430,13 +430,4 @@ class LeadController extends BaseController
             return $this->error($response, 'Failed to convert lead: ' . $e->getMessage(), 500);
         }
     }
-
-    /**
-     * Get client IP address
-     */
-    private function getClientIp(Request $request): string
-    {
-        $serverParams = $request->getServerParams();
-        return $serverParams['HTTP_X_FORWARDED_FOR'] ?? $serverParams['REMOTE_ADDR'] ?? 'unknown';
-    }
 }

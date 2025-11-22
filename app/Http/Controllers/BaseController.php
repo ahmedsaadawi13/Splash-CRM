@@ -117,4 +117,13 @@ abstract class BaseController
             $this->logger->error($message, $context);
         }
     }
+
+    /**
+     * Get client IP address from request
+     */
+    protected function getClientIp($request): string
+    {
+        $serverParams = $request->getServerParams();
+        return $serverParams['HTTP_X_FORWARDED_FOR'] ?? $serverParams['REMOTE_ADDR'] ?? 'unknown';
+    }
 }

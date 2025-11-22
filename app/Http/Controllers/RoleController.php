@@ -102,7 +102,17 @@ class RoleController extends BaseController
                 }
             }
 
-            $this->audit->log('role', $role->id, 'created', null, $role->toArray(), $currentUser->id, $currentUser->tenant_id);
+            $this->audit->log(
+                'role',
+                $role->id,
+                'created',
+                null,
+                $role->toArray(),
+                $currentUser->id,
+                $currentUser->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
@@ -192,7 +202,17 @@ class RoleController extends BaseController
                 }
             }
 
-            $this->audit->log('role', $role->id, 'updated', $oldValues, $role->toArray(), $currentUser->id, $currentUser->tenant_id);
+            $this->audit->log(
+                'role',
+                $role->id,
+                'updated',
+                $oldValues,
+                $role->toArray(),
+                $currentUser->id,
+                $currentUser->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
@@ -239,7 +259,17 @@ class RoleController extends BaseController
             $roleData = $role->toArray();
             $role->delete();
 
-            $this->audit->log('role', $role->id, 'deleted', $roleData, null, $currentUser->id, $currentUser->tenant_id);
+            $this->audit->log(
+                'role',
+                $role->id,
+                'deleted',
+                $roleData,
+                null,
+                $currentUser->id,
+                $currentUser->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 

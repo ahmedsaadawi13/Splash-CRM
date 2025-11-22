@@ -122,7 +122,17 @@ class ProductController extends BaseController
             $product->fill($data);
             $product->save();
 
-            $this->audit->log('product', $product->id, 'created', null, $product->toArray(), $user->id, $user->tenant_id);
+            $this->audit->log(
+                'product',
+                $product->id,
+                'created',
+                null,
+                $product->toArray(),
+                $user->id,
+                $user->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
@@ -183,7 +193,17 @@ class ProductController extends BaseController
             $product->fill($data);
             $product->save();
 
-            $this->audit->log('product', $product->id, 'updated', $oldValues, $product->toArray(), $user->id, $user->tenant_id);
+            $this->audit->log(
+                'product',
+                $product->id,
+                'updated',
+                $oldValues,
+                $product->toArray(),
+                $user->id,
+                $user->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
@@ -212,7 +232,17 @@ class ProductController extends BaseController
             $productData = $product->toArray();
             $product->delete();
 
-            $this->audit->log('product', $product->id, 'deleted', $productData, null, $user->id, $user->tenant_id);
+            $this->audit->log(
+                'product',
+                $product->id,
+                'deleted',
+                $productData,
+                null,
+                $user->id,
+                $user->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 

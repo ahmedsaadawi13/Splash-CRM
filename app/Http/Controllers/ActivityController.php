@@ -132,7 +132,17 @@ class ActivityController extends BaseController
             $activity->fill($data);
             $activity->save();
 
-            $this->audit->log('activity', $activity->id, 'created', null, $activity->toArray(), $user->id, $user->tenant_id);
+            $this->audit->log(
+                'activity',
+                $activity->id,
+                'created',
+                null,
+                $activity->toArray(),
+                $user->id,
+                $user->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
@@ -192,7 +202,17 @@ class ActivityController extends BaseController
             $activity->fill($data);
             $activity->save();
 
-            $this->audit->log('activity', $activity->id, 'updated', $oldValues, $activity->toArray(), $user->id, $user->tenant_id);
+            $this->audit->log(
+                'activity',
+                $activity->id,
+                'updated',
+                $oldValues,
+                $activity->toArray(),
+                $user->id,
+                $user->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
@@ -221,7 +241,17 @@ class ActivityController extends BaseController
             $activityData = $activity->toArray();
             $activity->delete();
 
-            $this->audit->log('activity', $activity->id, 'deleted', $activityData, null, $user->id, $user->tenant_id);
+            $this->audit->log(
+                'activity',
+                $activity->id,
+                'deleted',
+                $activityData,
+                null,
+                $user->id,
+                $user->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 

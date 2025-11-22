@@ -120,7 +120,17 @@ class AccountController extends BaseController
             $account->fill($data);
             $account->save();
 
-            $this->audit->log('account', $account->id, 'created', null, $account->toArray(), $user->id, $user->tenant_id);
+            $this->audit->log(
+                'account',
+                $account->id,
+                'created',
+                null,
+                $account->toArray(),
+                $user->id,
+                $user->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
@@ -182,7 +192,17 @@ class AccountController extends BaseController
             $account->fill($data);
             $account->save();
 
-            $this->audit->log('account', $account->id, 'updated', $oldValues, $account->toArray(), $user->id, $user->tenant_id);
+            $this->audit->log(
+                'account',
+                $account->id,
+                'updated',
+                $oldValues,
+                $account->toArray(),
+                $user->id,
+                $user->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
@@ -211,7 +231,17 @@ class AccountController extends BaseController
             $accountData = $account->toArray();
             $account->delete();
 
-            $this->audit->log('account', $account->id, 'deleted', $accountData, null, $user->id, $user->tenant_id);
+            $this->audit->log(
+                'account',
+                $account->id,
+                'deleted',
+                $accountData,
+                null,
+                $user->id,
+                $user->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 

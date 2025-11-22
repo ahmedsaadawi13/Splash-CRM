@@ -125,7 +125,17 @@ class OpportunityController extends BaseController
             $opportunity->fill($data);
             $opportunity->save();
 
-            $this->audit->log('opportunity', $opportunity->id, 'created', null, $opportunity->toArray(), $user->id, $user->tenant_id);
+            $this->audit->log(
+                'opportunity',
+                $opportunity->id,
+                'created',
+                null,
+                $opportunity->toArray(),
+                $user->id,
+                $user->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
@@ -195,7 +205,17 @@ class OpportunityController extends BaseController
 
             $opportunity->save();
 
-            $this->audit->log('opportunity', $opportunity->id, 'updated', $oldValues, $opportunity->toArray(), $user->id, $user->tenant_id);
+            $this->audit->log(
+                'opportunity',
+                $opportunity->id,
+                'updated',
+                $oldValues,
+                $opportunity->toArray(),
+                $user->id,
+                $user->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
@@ -224,7 +244,17 @@ class OpportunityController extends BaseController
             $opportunityData = $opportunity->toArray();
             $opportunity->delete();
 
-            $this->audit->log('opportunity', $opportunity->id, 'deleted', $opportunityData, null, $user->id, $user->tenant_id);
+            $this->audit->log(
+                'opportunity',
+                $opportunity->id,
+                'deleted',
+                $opportunityData,
+                null,
+                $user->id,
+                $user->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 

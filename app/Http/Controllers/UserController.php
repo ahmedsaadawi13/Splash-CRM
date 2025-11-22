@@ -148,7 +148,17 @@ class UserController extends BaseController
                 }
             }
 
-            $this->audit->log('user', $user->id, 'created', null, $user->toArray(), $currentUser->id, $currentUser->tenant_id);
+            $this->audit->log(
+                'user',
+                $user->id,
+                'created',
+                null,
+                $user->toArray(),
+                $currentUser->id,
+                $currentUser->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
@@ -250,7 +260,17 @@ class UserController extends BaseController
                 }
             }
 
-            $this->audit->log('user', $user->id, 'updated', $oldValues, $user->toArray(), $currentUser->id, $currentUser->tenant_id);
+            $this->audit->log(
+                'user',
+                $user->id,
+                'updated',
+                $oldValues,
+                $user->toArray(),
+                $currentUser->id,
+                $currentUser->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
@@ -292,7 +312,17 @@ class UserController extends BaseController
             $userData = $user->toArray();
             $user->delete();
 
-            $this->audit->log('user', $user->id, 'deleted', $userData, null, $currentUser->id, $currentUser->tenant_id);
+            $this->audit->log(
+                'user',
+                $user->id,
+                'deleted',
+                $userData,
+                null,
+                $currentUser->id,
+                $currentUser->tenant_id,
+                $this->getClientIp($request),
+                $request->getHeaderLine('User-Agent')
+            );
 
             DB::commit();
 
