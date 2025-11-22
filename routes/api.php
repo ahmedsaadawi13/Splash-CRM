@@ -32,6 +32,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) {
         $protected->get('/leads/{id}', 'App\Http\Controllers\LeadController:show');
         $protected->put('/leads/{id}', 'App\Http\Controllers\LeadController:update');
         $protected->delete('/leads/{id}', 'App\Http\Controllers\LeadController:destroy');
+        $protected->post('/leads/{id}/convert', 'App\Http\Controllers\LeadController:convert');
 
         // Contacts
         $protected->get('/contacts', 'App\Http\Controllers\ContactController:index');

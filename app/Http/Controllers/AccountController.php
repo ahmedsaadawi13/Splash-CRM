@@ -1,0 +1,210 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Account;
+use App\Services\ValidationService;
+use App\Services\AuditService;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Illuminate\Database\Capsule\Manager as DB;
+
+class AccountController extends BaseController
+{
+    private $validator;
+    private $audit;
+
+    public function __construct(ValidationService $validator, AuditService $audit)
+    {
+        $this->validator = $validator;
+        $this->audit = $audit;
+    }
+
+    public function index(Request $request, Response $response): Response
+    {
+        $params = $request->getQueryParams();
+        $user = $request->getAttribute('user');
+
+        $page = max(1, (int)($params['page'] ?? 1));
+        $perPage = min(100, max(1, (int)($params['per_page'] ?? 20)));
+
+        $query = Account::query()->where('tenant_id', $user->tenant_id);
+
+        if (!empty($params['search'])) {
+            $search = $params['search'];
+            $query->where(function ($q) use ($search) {
+                $q->where('account_name', 'LIKE', "%{$search}%")
+                  ->orWhere('website', 'LIKE', "%{$search}%")
+                  ->orWhere('phone', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%");
+            });
+        }
+
+        if (!empty($params['account_type'])) {
+            $query->where('account_type', $params['account_type']);
+        }
+
+        if (!empty($params['industry'])) {
+            $query->where('industry', $params['industry']);
+        }
+
+        $sortField = $params['sort'] ?? 'created_at';
+        $sortOrder = strtoupper($params['order'] ?? 'DESC');
+
+        if (in_array($sortField, ['id', 'account_name', 'created_at']) && in_array($sortOrder, ['ASC', 'DESC'])) {
+            $query->orderBy($sortField, $sortOrder);
+        }
+
+        $total = $query->count();
+
+        $accounts = $query
+            ->with(['owner:id,first_name,last_name'])
+            ->withCount('contacts', 'opportunities')
+            ->skip(($page - 1) * $perPage)
+            ->take($perPage)
+            ->get();
+
+        return $this->success($response, [
+            'accounts' => $accounts,
+            'pagination' => [
+                'total' => $total,
+                'per_page' => $perPage,
+                'current_page' => $page,
+                'last_page' => ceil($total / $perPage),
+            ],
+        ]);
+    }
+
+    public function store(Request $request, Response $response): Response
+    {
+        $data = $request->getParsedBody();
+        $user = $request->getAttribute('user');
+
+        $rules = [
+            'account_name' => 'required|max:255',
+            'account_type' => 'in:customer,prospect,partner,vendor,competitor,other',
+            'website' => 'url|max:500',
+            'email' => 'email|max:255',
+            'annual_revenue' => 'numeric',
+            'employees' => 'numeric',
+        ];
+
+        $errors = $this->validator->validate($data, $rules);
+
+        if (!$this->validator->passes($errors)) {
+            return $this->validationError($response, $this->validator->formatErrors($errors));
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $account = new Account();
+            $account->tenant_id = $user->tenant_id;
+            $account->uuid = uuid();
+            $account->owner_id = $data['owner_id'] ?? $user->id;
+            $account->fill($data);
+            $account->save();
+
+            $this->audit->log('account', $account->id, 'created', null, $account->toArray(), $user->id, $user->tenant_id);
+
+            DB::commit();
+
+            return $this->success($response, $account->load('owner'), 'Account created successfully', 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->error($response, 'Failed to create account', 500);
+        }
+    }
+
+    public function show(Request $request, Response $response, array $args): Response
+    {
+        $user = $request->getAttribute('user');
+        $id = $args['id'];
+
+        $account = Account::where('tenant_id', $user->tenant_id)
+            ->with(['owner', 'contacts', 'opportunities'])
+            ->find($id);
+
+        if (!$account) {
+            return $this->notFound($response, 'Account not found');
+        }
+
+        return $this->success($response, $account);
+    }
+
+    public function update(Request $request, Response $response, array $args): Response
+    {
+        $data = $request->getParsedBody();
+        $user = $request->getAttribute('user');
+        $id = $args['id'];
+
+        $account = Account::where('tenant_id', $user->tenant_id)->find($id);
+
+        if (!$account) {
+            return $this->notFound($response, 'Account not found');
+        }
+
+        $rules = [
+            'account_name' => 'max:255',
+            'account_type' => 'in:customer,prospect,partner,vendor,competitor,other',
+            'website' => 'url|max:500',
+            'email' => 'email|max:255',
+            'annual_revenue' => 'numeric',
+            'employees' => 'numeric',
+        ];
+
+        $errors = $this->validator->validate($data, $rules);
+
+        if (!$this->validator->passes($errors)) {
+            return $this->validationError($response, $this->validator->formatErrors($errors));
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $oldValues = $account->toArray();
+            $account->fill($data);
+            $account->save();
+
+            $this->audit->log('account', $account->id, 'updated', $oldValues, $account->toArray(), $user->id, $user->tenant_id);
+
+            DB::commit();
+
+            return $this->success($response, $account->load('owner'), 'Account updated successfully');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->error($response, 'Failed to update account', 500);
+        }
+    }
+
+    public function destroy(Request $request, Response $response, array $args): Response
+    {
+        $user = $request->getAttribute('user');
+        $id = $args['id'];
+
+        $account = Account::where('tenant_id', $user->tenant_id)->find($id);
+
+        if (!$account) {
+            return $this->notFound($response, 'Account not found');
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $accountData = $account->toArray();
+            $account->delete();
+
+            $this->audit->log('account', $account->id, 'deleted', $accountData, null, $user->id, $user->tenant_id);
+
+            DB::commit();
+
+            return $this->success($response, null, 'Account deleted successfully');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->error($response, 'Failed to delete account', 500);
+        }
+    }
+}
