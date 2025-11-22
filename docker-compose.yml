@@ -1,0 +1,127 @@
+version: '3.8'
+
+services:
+  # PHP-FPM Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: splash_crm_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+    networks:
+      - splash_network
+    environment:
+      - DB_HOST=mysql
+      - DB_DATABASE=splash_crm
+      - DB_USERNAME=splash_user
+      - DB_PASSWORD=splash_password
+      - REDIS_HOST=redis
+    depends_on:
+      - mysql
+      - redis
+
+  # Nginx Web Server
+  nginx:
+    image: nginx:alpine
+    container_name: splash_crm_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - splash_network
+    depends_on:
+      - app
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: splash_crm_mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: splash_crm
+      MYSQL_USER: splash_user
+      MYSQL_PASSWORD: splash_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - splash_network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: splash_crm_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - splash_network
+
+  # PHPMyAdmin (optional, for database management)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: splash_crm_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: splash_user
+      PMA_PASSWORD: splash_password
+      UPLOAD_LIMIT: 100M
+    networks:
+      - splash_network
+    depends_on:
+      - mysql
+
+  # MailHog (for email testing)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: splash_crm_mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - splash_network
+
+  # Queue Worker
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: splash_crm_worker
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    command: php bin/worker.php
+    networks:
+      - splash_network
+    depends_on:
+      - app
+      - redis
+      - mysql
+
+networks:
+  splash_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local

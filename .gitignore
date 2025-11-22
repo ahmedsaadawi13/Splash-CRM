@@ -1,0 +1,67 @@
+# Dependencies
+/vendor/
+/node_modules/
+composer.lock
+package-lock.json
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+/storage/logs/*.log
+/logs/*.log
+*.log
+
+# Cache
+/storage/cache/*
+!/storage/cache/.gitkeep
+/storage/framework/cache/*
+!/storage/framework/cache/.gitkeep
+
+# Sessions
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitkeep
+
+# Testing
+/coverage/
+.phpunit.result.cache
+.phpunit.cache
+
+# Build artifacts
+/public/hot
+/public/storage
+/public/dist
+/public/build
+/public/js
+/public/css
+/dist/
+
+# Temporary files
+/storage/tmp/*
+!/storage/tmp/.gitkeep
+/tmp/
+
+# Uploads
+/storage/uploads/*
+!/storage/uploads/.gitkeep
+
+# Database
+*.sqlite
+*.sqlite-journal
+database/*.sqlite
+
+# Docker
+docker-compose.override.yml
+
+# OS
+Thumbs.db
